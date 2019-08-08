@@ -1,30 +1,3 @@
-## **Repository Name: app-backend-suicide-watch**
- 
----
-
-##### **HERE IS A PIECE OF BAD ASCII ART FOR NO PARTICULAR REASON**
-```
-<-------------------->
-  <-------------------->
-    <-------------------->
-      <-------------------->
-        <-------------------->
-          <-------------------->
-            <-------------------->
-          <-------------------->
-        <-------------------->
-      <-------------------->
-    <-------------------->
-  <-------------------->
-<-------------------->
-```
----
-
-## **Branch prefix off master**
-   - `app-be-sw-master`
-
----
-
 ### **Setting Up database by the CLI**
 1. `postgres psql`
 2. `CREATE DATABASE test;`

@@ -4,7 +4,7 @@
   "description": "A web based application to help people considering suicide.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watcher": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/BrianARuff/app-backend-suicide-watch#readme",
   "dependencies": {
     "dotenv": "^8.0.0",
+    "express": "^4.17.1",
     "knex": "^0.19.1",
     "pg": "^7.12.0"
   }
