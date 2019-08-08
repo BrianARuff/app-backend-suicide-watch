@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/BrianARuff/app-backend-suicide-watch/issues"
   },
-  "homepage": "https://github.com/BrianARuff/app-backend-suicide-watch#readme"
+  "homepage": "https://github.com/BrianARuff/app-backend-suicide-watch#readme",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "knex": "^0.19.1",
+    "pg": "^7.12.0"
+  }
 }
