@@ -22,3 +22,21 @@
 
 ## **Branch prefix off master**
    - `app-be-sw-master`
+
+### Git Scenarios:
+
+1. You have just renamed a branch off of master to a new name. When you go to push it you get an error that says:
+```
+fatal: The upstream branch of your current branch does not match
+the name of your current branch.  To push to the upstream branch
+on the remote, use
+```
+
+2. This problem is solved with `git push --set-upstream <new-origin> <branch-to-track>`. An example of the output with that command will yield the following:
+
+`git push --set-upstream origin app-be-sw--add_middleware`
+
+```
+Branch 'app-be-sw--add_middleware' set up to track remote branch 'app-be-sw--add_middleware' from 'origin'.
+Everything up-to-date
+```
