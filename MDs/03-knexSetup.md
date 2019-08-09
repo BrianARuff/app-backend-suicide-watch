@@ -38,4 +38,13 @@
       useNullAsDefault: true
     }
   }
-```
+  ```
+
+### AFTER you have done the above and completed setting up the schema in the `db/migrations` folder
+ - `knex seed:make` generates seed files for the database
+ - `knex seed:run` runs the seeds on the database to populate it with dummy data.
+ - `knex migrate:make` creates the initial migration file where you structure the schema of your tables.
+ - `knex migrate:rollback` reverts your migrations in your DB back to the first version of the database while it was still empty and had no schema.
+ - `knex migrate:latest` rolls forward from it's current place in migration order and the applies the rest of the migrations to the database.
+ - `knex migrate:up` migrate 1 migration up in your current migration file.
+ - `knex migrate:down` migrate down in your current migration file.

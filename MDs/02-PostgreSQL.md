@@ -62,7 +62,7 @@ WHERE to_tsvector(description) @@ to_tsquery('string value to search here');
   ALTER TABLE test
   ADD COLUMN description text NOT NULL;
  ```
-ddThe column description will be of type text and will be required because it's not allowed to be a null value.
+The column description will be of type text and will be required because it's not allowed to be a null value.
 
 ---
 
@@ -73,8 +73,70 @@ ALTER TABLE test
 DROP COLUMN description;
 ```
 
-### **Drop Entire Table 🤕🥊**
+### **Drop Entire Table 🤕🥊** - Delete the entire table from the database!
 
 ```
 DROP TABLE test
 ```
+
+### Truncate table - Truncating clears the table's contents, but not the table itself
+```
+TRUNCATE TABLE test;
+```
+
+### Encrypt password via database using PostgreSQL: [source](https://x-team.com/blog/storing-secure-passwords-with-postgresql/)
+```
+CREATE EXECUTE pgcrypto
+```
+When creating a table you can set the column field of your password you can put a data-type of what you want, but I put varchar(255).
+
+When I do table insertions in-order to get this add-on to work properly I would have to do something like the following. The first agrument in the crypt function is the password of the user. The second argument is a function callback called `gen_salt` and takes 1 argument that is specifying that algorithm being used to encrypyt the password with. The encryption algorithm here is `bf` which is short for `blow-fish`. Other algorithms include `md5, xdes, and des`. **The `blow-fish` maximum length is 72 characters, so there is no need to make your varchar type larger than that**.
+
+```
+crypt('hard_password', gen_salt('bf'))
+```
+
+### Automatically updating Timestamps [source](https://x-team.com/blog/automatic-timestamps-with-postgresql/)
+
+#### Step 1: Create the function
+ - Using the PL/pgSQL built-in (by default) to PostgreSQL
+ - The returned `new` object is a RECORD object containing data being inserted
+
+```
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+#### Step 2: Create Table with PostgreSQL
+
+```
+CREATE TABLE todos (
+  id SERIAL NOT NULL PRIMARY KEY,
+  content TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  completed_at TIMESTAMPTZ
+);
+```
+
+#### Step 3: Create the trigger
+
+```
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON todos
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp()
+```
+- This trigger will cause the function `trigger_set_timestamp` from **step 1** to be executed whenever a row is updated in the table.
+
+#### Step 4: Test it out!
+```
+INSERT INTO todos (content) 
+VALUES ('buy milk') RETURNING *;
+```
+ - This updates the `updated_at` and `completed_at` columns automatically!

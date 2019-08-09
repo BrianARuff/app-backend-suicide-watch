@@ -1,15 +1,27 @@
 const router = require("express").Router();
-const db = require("../database/db");
+const db = require("../db/db.js");
 
-router.get("/users", (req, res) => {
-  res.send(usersTemplateLiteral)
+router.get("/", (req, res) => {
+  db.raw(
+    `
+      SELECT * FROM USERS;
+    `
+  )
+  .then((user) => res.status(200).send(user.rows))
+  .catch(error => res.status(500).send(new Error(error)));
 });
 
-module.exports = router;
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  db.raw(
+    `
+      SELECT * FROM USERS
+      WHERE ID = ?;
+    `,
+    [id]
+  )
+    .then((user) => res.status(200).send(user.rows[0]))
+    .catch(error => res.status(500).send(new Error(error)));
+})
 
-const usersTemplateLiteral = `
-  <h1>Users API</h1>
-  <ul>
-    <a href="/">Root Page</a>
-  </ul>
-`;
+module.exports = router;
