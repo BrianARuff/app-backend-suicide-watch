@@ -1,13 +1,9 @@
 const router = require("express").Router();
-const db = require("../db.js");
+const db = require("../database/db");
 
 router.get("/users", (req, res) => {
   res.send(usersTemplateLiteral)
 });
-
-
-
-
 
 module.exports = router;
 
