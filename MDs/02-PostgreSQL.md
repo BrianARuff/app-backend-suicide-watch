@@ -42,7 +42,7 @@ SELECT * FROM test;
 
 3. If you were to run `to_tsvector` on the text **"The quick brown fox jumped over the lazy dog."**
      - It would return a list with results something like: 
-###### **{ **"quick": 2**, **"brown": 3**, **"fox": 4**, **"jumped": 5**, **"lazy": 8**, **"dog": 9** }**
+##### **{ **"quick": 2**, **"brown": 3**, **"fox": 4**, **"jumped": 5**, **"lazy": 8**, **"dog": 9** }**
   - But wait there is more, it sorts it alphabetically as well like such!!
     - {"brown": 3 "dog": 9 "fox": 4 "jumped": 5 "lazy": 8 "quick": 2}
     - Note that the numbers are the index of the order the word appears in the original sentence.
