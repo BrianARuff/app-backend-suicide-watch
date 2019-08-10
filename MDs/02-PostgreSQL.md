@@ -47,7 +47,7 @@ SELECT * FROM test;
   - **But wait there is more**, it sorts it alphabetically as well like such!!
     - {"brown": 3 "dog": 9 "fox": 4 "jumped": 5 "lazy": 8 "quick": 2}
     - Note that the numbers are the index of the order the word appears in the original sentence.
-  - There is even more magic happening though.
+  - There is even **more magic happening** though.
       - `to_tsvector`, by default, ***lexeme*** each indexed word, so the result object is now this:
         - {"brown": 3, "dog": 9, "fox": 4, "***jump***": 5, "***lazi***": 8 "quick": 2}.
          - jumped was switched to jump and lazy was switched to lazi. This all happens based on the localization of your postgresql setup.
