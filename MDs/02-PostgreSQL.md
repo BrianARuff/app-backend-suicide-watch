@@ -33,7 +33,7 @@ SELECT * FROM test;
 
 ### [Full Text Search](https://www.compose.com/articles/mastering-postgresql-tools-full-text-search-and-phrase-search/)
 
-##### Note: Perform Magical Search Operations with the Following
+###### Note: Perform Magical Search Operations with the Following
 1. `to_tsvector` 
     - creates a list of tokens. The `ts` in `to_tsvector` stands for text search.
 2. `to_tsquery`
