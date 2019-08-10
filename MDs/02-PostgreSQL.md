@@ -91,7 +91,7 @@ TRUNCATE TABLE test;
 ```
 CREATE EXECUTE pgcrypto
 ```
-When creating a table you can set the column field of your password you can put a data-type of what you want, but I put varchar(255).
+When creating a table you can set the column field of your password you can put a data-type of what you want, but I put varchar(72).
 
 When I do table insertions in-order to get this add-on to work properly I would have to do something like the following. The first agrument in the crypt function is the password of the user. The second argument is a function callback called `gen_salt` and takes 1 argument that is specifying that algorithm being used to encrypyt the password with. The encryption algorithm here is `bf` which is short for `blow-fish`. Other algorithms include `md5, xdes, and des`. **The `blow-fish` maximum length is 72 characters, so there is no need to make your varchar type larger than that**.
 
