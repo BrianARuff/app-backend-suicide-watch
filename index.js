@@ -1,4 +1,5 @@
 require("dotenv").config();
+const serveStatic = require("./node_modules/")
 
 const express = require("express");
 const server = express();
@@ -13,22 +14,13 @@ parseMiddleWare(server);
 
 // routes
 const userRoutes = require("./routes/userRoutes.js");
-server.use("/api/users", userRoutes);
+server.use("/users", userRoutes);
 
 server.get("/", (req, res) => {
   res.send(htmlTemplate(html));
-})
-
-const html = 
-`
-  <div>
-    <h1>Root API Page</h1>
-    <ul>
-      <a href="/api/users">Users Page</a>
-    </ul>
-  </div>
-`;
+});
 
 server.listen(PORT, (req, res) => {
   console.log(PORT);
 });
+
