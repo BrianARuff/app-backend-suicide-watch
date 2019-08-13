@@ -1,3 +1,5 @@
+# [Additional .MD-Note-Files for this Application](https://github.com/BrianARuff/app-backend-suicide-watch/tree/master/MDs)
+
 ## **Repository Name: app-backend-suicide-watch**
  
 ---
@@ -32,7 +34,7 @@ the name of your current branch.  To push to the upstream branch
 on the remote, use
 ```
 
-2. This problem is solved with `git push --set-upstream <new-origin> <branch-to-track>`. An example of the output with that command will yield the following:
+This problem is solved with `git push --set-upstream <new-origin> <branch-to-track>`. An example of the output with that command will yield the following:
 
 `git push --set-upstream origin app-be-sw--add_middleware`
 
