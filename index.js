@@ -2,19 +2,26 @@ require("dotenv").config();
 
 const express = require("express");
 const server = express();
+const PORT = parseInt(process.env.PORT, 10);
+
+// html template function
+const htmlTemplate = require("./htmlTemplate.js");
 
 // middleware
 const parseMiddleWare = require("./middleWare/middleware.js");
 parseMiddleWare(server);
 
-// Home Page of API
+// routes
+const userRoutes = require("./routes/userRoutes.js");
+server.use("/users", userRoutes);
+
 server.get("/", (req, res) => {
-  res.send("<h1>It works</h1>");
+  res.send(htmlTemplate("<h1>It works</h1>"));
 });
 
-server.listen(process.env.PORT || 3000, (req, res) => {
+server.listen(PORT, (req, res) => {
   console.log('====================================================================='); 
-  const consoleMessage = `Server running on port ${process.env.PORT || 3000}`;
+  const consoleMessage = `Server running on port ${process.env.PORT || PORT}`;
   process.stdout.write(consoleMessage.padStart(50) + "\n");
   console.log('=====================================================================');
 });
