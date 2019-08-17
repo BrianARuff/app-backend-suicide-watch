@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
   try {
-    const { rows: users } = await database.query(process.env.GET_ALL_USERS);
+    const { rows: users } = await database.query("SELECT * from USERS;");
     if (users.length < 1) {
       errors.clientSideError404;
       return res.status(404).json({ error: error.stack, message: errors.clientSideError404, date: loggableDate, time: loggableTime });
@@ -23,12 +23,11 @@ router.get("/", async (req, res) => {
 // GET USER by ID
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(req.params.id);
   const date = new Date();
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
   try {
-    const user = await database.query(process.env.GET_SINGLE_USER, [id]);
+    const user = await database.query("SELECT * from USERS WHERE USERS.id = $1", [id]);
     if (!user.rows[0]) {
       return res.status(404).json({ statusCode: res.statusCode, message: errors.clientSideError404, date: loggableDate, time: loggableTime });
     } else {

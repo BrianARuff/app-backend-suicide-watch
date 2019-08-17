@@ -1,47 +1,39 @@
-### Setup Users Table in PG database console
+## Create User Table
+```
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TABLE USERS (
+  id            serial       NOT NULL PRIMARY KEY,
+  name          varchar(15)  NOT NULL UNIQUE,
+  password      varchar(255) NOT NULL,
+  email         varchar(255) NOT NULL UNIQUE,
+  date_of_birth date         NOT NULL,
+  role          varchar(11)  NOT NULL DEFAULT 'member',
+  description   varchar(5000),
+  image         text,
+  friends       jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT NOW(),
+  updated_at    timestamptz  NOT NULL DEFAULT NOW()
+);
+
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON USERS
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 
 ```
-  DROP EXTENSION IF EXISTS pgcrypto;
-  DROP TYPE IF EXISTS genderEnum;
-  DROP TYPE IF EXISTS roleEnum;
-  -----------------------------------------------
 
-  CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-  RETURNS TRIGGER AS $$
-  BEGIN
-      NEW.updated_at = NOW();
-      RETURN NEW;
-      END;
-  $$ LANGUAGE plpgsql;
+## Delete User Table
 
-  -----------------------------------------------
-  DROP EXTENSION IF EXISTS pgcrypto;
-  CREATE EXTENSION pgcrypto;
+```
 
-  -----------------------------------------------
-  
-  CREATE TYPE genderEnum AS ENUM ('male', 'female', 'other');
-  CREATE TYPE roleEnum AS ENUM ('banned', 'suspended', 'member', 'admin', 'developer');
+DROP TABLE USERS;
 
-  -----------------------------------------------
-  CREATE TABLE users
-  (
-  id            serial       NOT NULL PRIMARY KEY,
-  username      varchar(33)  NOT NULL UNIQUE,
-  password      varchar(255) NOT NULL,
-  date_of_birth date         NOT NULL,
-  gender        genderEnum   NOT NULL,
-  created_at    timestamptz  NOT NULL DEFAULT NOW(),
-  updated_at    timestamptz  NOT NULL DEFAULT NOW(),
-  role          roleEnum     NOT NULL DEFAULT 'member',
-  description   text,
-  image         jsonb,
-  friends       jsonb
-  );
-
-  -----------------------------------------------
-  CREATE TRIGGER set_timestamp
-  BEFORE UPDATE ON users
-  FOR EACH ROW
-  EXECUTE PROCEDURE trigger_set_timestamp();
 ```
