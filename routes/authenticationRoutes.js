@@ -54,7 +54,11 @@ router.post("/register", async (req, res) => {
     );
 
     if (!user) {
+<<<<<<< HEAD
       return res.status(404).json({ message: errors.clientSideError404, date: loggableDate, time: loggableTime });
+=======
+      res.status(404).json({ message: errors.clientSideError404, date: loggableDate, time: loggableTime });
+>>>>>>> parent of 54b9096... Revert "working on authentication routes for /registration. I am having some issues with my POST request to create a new user in the DATABASE, but I have an open ticket on SO, so we will see how that goes. That place is hit or miss, and I fucking hate it when it's a miss because I will have to deal with some fucking ass-hole who thinks they are superior, yet they refuse to answer the question or some BS like that, fuck stack overflow, fuck them up their stupid asses (sometimes that is, no not really, I love you stack overflow, but you crazy as hell though, love you girl)."
     }
 
     return res.status(200).json(newUser.rows[0]);
