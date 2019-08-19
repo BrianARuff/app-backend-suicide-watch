@@ -1,5 +1,6 @@
 const createUserTableQuery =
 `
+
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -9,17 +10,22 @@ BEGIN
 $$ LANGUAGE plpgsql;
 
 CREATE TABLE USERS (
-  id            serial       NOT NULL PRIMARY KEY,
-  name          varchar(15)  NOT NULL UNIQUE,
-  password      varchar(255) NOT NULL,
-  email         varchar(255) NOT NULL UNIQUE,
-  date_of_birth date         NOT NULL,
-  role          varchar(11)  NOT NULL DEFAULT 'member',
-  description   varchar(5000),
-  image         text,
-  friends       jsonb,
-  created_at    timestamptz  NOT NULL DEFAULT NOW(),
-  updated_at    timestamptz  NOT NULL DEFAULT NOW()
+  id SERIAL NOT NULL PRIMARY KEY,
+  
+  name VARCHAR(15)  NOT NULL CHECK (name <> '') UNIQUE,
+  email VARCHAR(255) NOT NULL CHECK (email <> '') UNIQUE,
+  password VARCHAR(255) NOT NULL CHECK (password <> ''),
+  
+  date_of_birth date NOT NULL,
+  
+  description VARCHAR(255) UNIQUE,
+  image TEXT,
+  friends JSONB,
+
+  role VARCHAR(255)  NOT NULL CHECK (role <> '') DEFAULT 'member',
+  
+  created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
 
@@ -28,6 +34,5 @@ BEFORE UPDATE ON USERS
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
+
 `
-
-

@@ -1,0 +1,10 @@
+{
+  "sqltools.connections": [
+    {
+      "connectString": "postgresql://brian-ruff:NoGold1357@localhost:5432/sw",
+      "connectionTimeout": 30,
+      "dialect": "PostgreSQL",
+      "name": "sw"
+    }
+  ]
+}

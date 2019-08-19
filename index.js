@@ -13,8 +13,6 @@ server.get("/", (req, res) => {
 });
 
 server.listen(process.env.PORT || 3000, (req, res) => {
-  console.log('====================================================================='); 
   const consoleMessage = `Server running on port ${process.env.PORT || 3000}`;
-  process.stdout.write(consoleMessage.padStart(50) + "\n");
-  console.log('=====================================================================');
+  process.stdout.write("---" + consoleMessage + "---\n");
 });

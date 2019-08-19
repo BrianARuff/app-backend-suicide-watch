@@ -89,3 +89,6 @@ typings/
 
 # knex init file
 knexfile.js
+
+# db files
+sw Session.sql
