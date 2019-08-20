@@ -2,6 +2,7 @@ const router = require("express").Router();
 const database = require("../db/pgConfig");
 const errors = require("../ErrorMessages/errorIndex");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
+const protect = require("../middleWare/protectRoutes");
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {
@@ -29,6 +30,24 @@ router.get("/:id", async (req, res) => {
   const loggableTime = date.toLocaleTimeString();
   try {
     const user = await database.query("SELECT * from USERS WHERE USERS.id = $1", [id]);
+    if (!user.rows[0] || !user) {
+      return res.status(404).json({ statusCode: res.statusCode, message: errors.clientSideError404, date: loggableDate, time: loggableTime });
+    } else {
+      return res.status(200).json(user.rows[0]);
+    }
+  } catch (error) {
+    return res.status(500).json({ error: formatPGErrors(error.stack), message: errors.serverSideErrorMessage500, date: loggableDate, time: loggableTime });
+  }
+});
+
+// GET USER by NAME
+router.get("/name/:name", protect, async (req, res) => {
+  const { name } = req.params;
+  const date = new Date();
+  const loggableDate = date.toLocaleDateString();
+  const loggableTime = date.toLocaleTimeString();
+  try {
+    const user = await database.query("SELECT * from USERS WHERE USERS.name = $1", [name]);
     if (!user.rows[0] || !user) {
       return res.status(404).json({ statusCode: res.statusCode, message: errors.clientSideError404, date: loggableDate, time: loggableTime });
     } else {
