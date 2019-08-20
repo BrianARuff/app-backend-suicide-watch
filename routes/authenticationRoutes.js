@@ -56,7 +56,6 @@ router.post("/register", async (req, res) => {
         algorithm: "HS256",
         keyid: uuid(),
         expiresIn: "7d",
-        notBefore: "2s",
         noTimestamp: false,
       }
     );
@@ -65,7 +64,10 @@ router.post("/register", async (req, res) => {
       user,
       {
         jwtid: uuid(),
-        subject: "user"
+        algorithm: "HS256",
+        keyid: uuid(),
+        expiresIn: "15m",
+        noTimestamp: false,
       }
     );
 

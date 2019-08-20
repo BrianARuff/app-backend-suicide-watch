@@ -22,26 +22,15 @@ async function protect(req, res, next) {
         req.header("name")
       ]);
 
-      if (
-        !user ||
-        !user.rows ||
-        user.rows[0]["role"] !== "member" ||
-        user.rows[0]["role"] !== "admin"
-      ) {
-
-        return res.status(403).json({ message: "You do not have the proper account permissions to view members by name. Only administrators can do this." });
-
-      } else {
-
+      if ( user.rows[0]["role"] === "admin" || user.rows[0]["role"] === "member" ) {
         return next();
-
+      } else {
+        return res.status(403).json({ message: "You do not have the proper account permissions to view members by name. Only administrators and members can do this." });
       }
     }
 
   } catch (error) {
-
     return res.status(401).json({ message: "Invalid token", error })
-
   }
 }
 

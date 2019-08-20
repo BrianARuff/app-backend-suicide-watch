@@ -3,6 +3,7 @@ const database = require("../db/pgConfig");
 const errors = require("../ErrorMessages/errorIndex");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protect = require("../middleWare/protectRoutes");
+const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {
