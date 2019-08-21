@@ -49,7 +49,7 @@ router.post("/register", async (req, res) => {
       friends
     }
 
-    const tokenGenerator = new TokenGenerator(
+    const tokenGenerator = new TokenGenerator (
       process.env.JWT_SECRET,
       process.env.JWT_PUBLIC,
       {
