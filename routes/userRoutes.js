@@ -4,6 +4,7 @@ const errors = require("../ErrorMessages/errorIndex");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
 const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
+const pg = require("pg");
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {
@@ -61,10 +62,10 @@ router.get("/name/:name", protectMemberScope, async (req, res) => {
 
 router.delete("/name/:name", protectAdminScope, async (req, res) => {
   const { name } = req.params;
-  
+
   // save user before deleting it for more precise API response messages.
   const user = await database.query("SELECT * from USERS WHERE USERS.name = $1", [name]);
-  
+
   try {
     // try/catch for DELETE
     await database.query(
@@ -84,6 +85,34 @@ router.delete("/name/:name", protectAdminScope, async (req, res) => {
       return res.status(500).json({ error: formatPGErrors(error) });
     }
 
+  } catch (error) {
+    return res.status(500).json(formatPGErrors(error));
+  }
+});
+
+router.patch("/name/:name", protectAdminScope, async (req, res) => {
+  const { name } = req.params;
+  const { email, password, date_of_birth, description, image, friends, role } = req.body;
+
+  const userRawData = await database.query("SELECT * FROM USERS WHERE users.name = $1", [
+    name
+  ]);
+
+  const { name: oldName, email: oldEmail, password: oldPassword, date_of_birth: old_date_of_birth, description: oldDescription, image: oldImage, friends: oldFriends, role: oldRole } = userRawData.rows[0];
+
+  try {
+    const updateUserRawData = await database.query("UPDATE users SET name = $1, email = $2, password = $3, date_of_birth = $4, description = $5, image = $6, friends = $7, role = $8 WHERE users.name = $9", [
+      (name || oldName),
+      (email || oldEmail),
+      (password || oldPassword),
+      (date_of_birth || old_date_of_birth),
+      (description || oldDescription),
+      (image || oldImage),
+      (JSON.stringify(friends) || JSON.stringify(oldFriends)),
+      (role || oldRole),
+      (name)
+    ]);
+    return res.status(200).json({ message: "User information was succesfully submitted.", updateUserRawData });
   } catch (error) {
     return res.status(500).json(formatPGErrors(error));
   }

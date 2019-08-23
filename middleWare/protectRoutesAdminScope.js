@@ -6,7 +6,7 @@ async function protect(req, res, next) {
   const authToken = req.header("auth-token");
 
   if (!authToken) {
-    return res.status(401).json({ message: "Invalid header header key-value store." });
+    return res.status(401).json({ message: "Invalid header key-value store." });
 
   }
 
