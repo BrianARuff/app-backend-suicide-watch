@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
   try {
-    const { rows: users } = await database.query("SELECT * from USERS;");
+    const { rows: users } = await database.query("SELECT * from USERS ORDER BY users.created_at DESC");
     if (users.length < 1 || !users) {
       errors.clientSideError404;
       return res.status(404).json({ users: [] });
@@ -49,7 +49,7 @@ router.get("/name/:name", protectMemberScope, async (req, res) => {
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
   try {
-    const user = await database.query("SELECT * from USERS WHERE USERS.name = $1", [name]);
+    const user = await database.query("SELECT * from USERS WHERE USERS.name = $1 ORDER", [name]);
     if (!user.rows[0] || !user) {
       return res.status(404).json({ statusCode: res.statusCode, message: errors.clientSideError404, date: loggableDate, time: loggableTime });
     } else {
@@ -113,6 +113,18 @@ router.patch("/name/:name", protectAdminScope, async (req, res) => {
       (name)
     ]);
     return res.status(200).json({ message: "User information was succesfully submitted.", updateUserRawData });
+  } catch (error) {
+    return res.status(500).json(formatPGErrors(error));
+  }
+});
+
+router.get("/startsWith/:char", async (req, res) => {
+  const { char } = req.params;
+  try {
+    const users = await database.query("SELECT * FROM users WHERE LOWER(name) LIKE LOWER($1) ORDER BY users.id ASC;", [
+      (char[0] + "%")
+    ]);
+    return res.status(200).json(users.rows);
   } catch (error) {
     return res.status(500).json(formatPGErrors(error));
   }

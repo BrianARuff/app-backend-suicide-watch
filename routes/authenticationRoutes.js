@@ -5,7 +5,6 @@ const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const TokenGenerator = require("../JWT/token-generator");
-const axios = require("axios");
 const uuid = require("uuid/v4");
 
 router.post("/register", async (req, res) => {
@@ -23,7 +22,7 @@ router.post("/register", async (req, res) => {
     const hash = await bcryptjs.hash(password, salt);
     await (password = hash);
   } else {
-    console.error(new Error("Invalid password path:/auth/register"))
+    console.error(new Error("Invalid password Error @ path:/auth/register"))
     return res.status(404).json({ message: "Invalid Password. Please try again." });
   }
 
@@ -80,18 +79,22 @@ router.post("/register", async (req, res) => {
           jwtid: uuid(),
         }
       );
-      console.log(jwt.decode(token, { complete: true }));
-      console.log(jwt.decode(token2, { complete: true }));
+      jwt.decode(token, { complete: true });
+      jwt.decode(token2, { complete: true });
     }, 900000)
 
+    const cookie = {};
+    cookie.data = {...req.session.cookie, token};
 
-    req.session.cookie.token = token;
-
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ cookie });
 
   } catch (error) {
     res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });
   }
+});
+
+router.post("/login", (req, res) => {
+ // TODO...
 });
 
 
