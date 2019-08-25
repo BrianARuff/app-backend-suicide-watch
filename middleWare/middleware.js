@@ -30,7 +30,7 @@ const sessionConfiguration = {
 
 module.exports = server => {
   server.use(helmet());
-  server.use(morgan("dev"));
+  process.env.NODE_ENV === "development" ? server.use(morgan("dev")) : null;
   server.use(express.json());
   server.use(cors());
   server.use(session(sessionConfiguration));
