@@ -59,8 +59,6 @@ router.post("/register", async (req, res) => {
       friends
     }
 
-    Object.freeze(user); // protect user object...
-
     const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
       algorithm: 'HS256', keyid: '1', noTimestamp: false,
       expiresIn: '2m', notBefore: '2s'
@@ -94,8 +92,6 @@ router.post("/login", async (req, res) => {
       name || email
     ]);
 
-    Object.freeze(user.rows[0]); // protect user object...
-
     if (!user.rows[0]) {
       return res.status(403).json({message: "Invalid login credentials."});
     }
@@ -121,8 +117,6 @@ router.post("/login", async (req, res) => {
         friends,
         created_at
       }
-
-      Object.freeze(userData); // protect userData...
 
       const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
         algorithm: 'HS256', keyid: '1', noTimestamp: false,
