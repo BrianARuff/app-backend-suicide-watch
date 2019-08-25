@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const router = require("express").Router();
 const database = require("../db/pgConfig");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
@@ -6,6 +7,8 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const TokenGenerator = require("../JWT/token-generator");
 const uuid = require("uuid/v4");
+
+/* REGISTER */
 
 router.post("/register", async (req, res) => {
 
@@ -20,10 +23,10 @@ router.post("/register", async (req, res) => {
   if (password) {
     const salt = await bcryptjs.genSalt(12);
     const hash = await bcryptjs.hash(password, salt);
-    await (password = hash);
+    password = hash;
   } else {
     console.error(new Error("Invalid password Error @ path:/auth/register"))
-    return res.status(404).json({ message: "Invalid Password. Please try again." });
+    return res.status(403).json({ message: "Invalid Password. Please try again." });
   }
 
   try {
@@ -48,54 +51,71 @@ router.post("/register", async (req, res) => {
       friends
     }
 
-    const tokenGenerator = new TokenGenerator (
-      process.env.JWT_SECRET,
-      process.env.JWT_PUBLIC,
-      {
-        algorithm: "HS256",
-        keyid: uuid(),
-        expiresIn: "7d",
-        noTimestamp: false,
-      }
-    );
-
-    const token = tokenGenerator.sign(
-      user,
+    const token = jwt.sign(user, process.env.JWT_SECRET,
       {
         jwtid: uuid(),
         algorithm: "HS256",
         keyid: uuid(),
         expiresIn: "15m",
         noTimestamp: false,
-      }
-    );
+      });
 
-    let token2;
+    req.session.cookie.token = token;
 
-    setTimeout(() => {
-      token2 = tokenGenerator.refresh(
-        token,
-        {
-          jwtid: uuid(),
-        }
-      );
-      jwt.decode(token, { complete: true });
-      jwt.decode(token2, { complete: true });
-    }, 900000)
-
-    const cookie = {};
-    cookie.data = {...req.session.cookie, token};
-
-    return res.status(200).json({ cookie });
+    return res.status(200).json({ user, token });
 
   } catch (error) {
-    res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });
+    return res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });
   }
 });
 
-router.post("/login", (req, res) => {
- // TODO...
-});
+/* LOGIN */
 
+router.post("/login", async (req, res) => {
+  const { password, name, email } = req.body;
+  try {
+    const user = await database.query("SELECT * FROM users WHERE users.name = $1 OR users.email = $1", [
+      name || email
+    ]);
+
+    const isValidPassword = await bcryptjs.compareSync(password, user.rows[0].password);
+
+
+    if ((user.rows[0].name === name || user.rows[0].email === email) && isValidPassword) {
+
+
+      const { name, email, date_of_birth, role, description, image, friends, created_at
+      } = user.rows[0];
+
+      const userData = {
+        name,
+        email,
+        date_of_birth,
+        role,
+        description,
+        image,
+        friends,
+        created_at
+      }
+
+      const token = jwt.sign(userData, process.env.JWT_SECRET,
+        {
+          jwtid: uuid(),
+          algorithm: "HS256",
+          keyid: uuid(),
+          expiresIn: "15m",
+          noTimestamp: false,
+        });
+  
+      req.session.cookie.token = token;
+
+      return res.status(200).json({userData, token});
+    } else {
+      return res.status(403).json({ message: "Invalid login credentials" });
+    }
+  } catch (error) {
+    return res.status(500).json(formatPGErrors(error));
+  }
+});
 
 module.exports = router;

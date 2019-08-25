@@ -19,7 +19,7 @@ const sessionConfiguration = {
   resave: true,
   cookie: {
     secure: true,
-    maxAge: 7*24*60*60*1000,
+    maxAge: 15*60*1000,
     httpOnly: true
   },
   genid: function(req) {
@@ -30,9 +30,9 @@ const sessionConfiguration = {
 
 module.exports = server => {
   server.use(helmet());
-  server.use(cors());
-  server.use(express.json());
   server.use(morgan("dev"));
+  server.use(express.json());
+  server.use(cors());
   server.use(session(sessionConfiguration));
   server.use("/users", userRoutes);
   server.use("/auth", authenticationRoutes);

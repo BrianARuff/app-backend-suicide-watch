@@ -22,7 +22,7 @@ CREATE TABLE USERS (
   image TEXT,
   friends JSONB,
 
-  role VARCHAR(255)  NOT NULL CHECK (role <> '') DEFAULT 'member',
+  role VARCHAR(255) DEFAULT 'member'),
   
   created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
