@@ -1,5 +1,5 @@
-const createUserTableQuery =
 `
+
 
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
@@ -33,6 +33,7 @@ CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON USERS
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
+
 
 
 `

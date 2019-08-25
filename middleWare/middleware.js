@@ -15,15 +15,14 @@ const thanosRoute = require("../routes/thanos-x2-Route");
 
 const sessionConfiguration = {
   secret: process.env.JWT_SECRET,
-  name: "auth-token",
+  name: "authentication-token",
   resave: true,
   cookie: {
-    secure: true,
-    maxAge: 15*60*1000,
-    httpOnly: true
+    maxAge: 1000*60*15,
+    httpOnly: false
   },
   genid: function(req) {
-    return uuid
+    return uuid();
   },
   saveUninitialized: true
 }

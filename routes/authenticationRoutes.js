@@ -8,8 +8,9 @@ const jwt = require("jsonwebtoken");
 const TokenGenerator = require("../JWT/token-generator");
 const uuid = require("uuid/v4");
 
-/* REGISTER */
-
+//==============================
+/*==========REGISTER==========*/
+// ==============================
 router.post("/register", async (req, res) => {
 
   const date = new Date();
@@ -51,16 +52,19 @@ router.post("/register", async (req, res) => {
       friends
     }
 
-    const token = jwt.sign(user, process.env.JWT_SECRET,
-      {
-        jwtid: uuid(),
-        algorithm: "HS256",
-        keyid: uuid(),
-        expiresIn: "15m",
-        noTimestamp: false,
-      });
+    const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, { algorithm: 'HS256', keyid: '1', noTimestamp: false, 
+    expiresIn: '2m', notBefore: '2s' })
+    
+    let token2;
+    const token = tokenGenerator.sign(user);
 
-    req.session.cookie.token = token;
+    setTimeout(function () {
+      token2 = tokenGenerator.refresh(user);
+      console.log("OLD", jwt.decode(token, { complete: true }));
+      console.log("NEW", jwt.decode(token2, { complete: true }));
+    }, 3000)
+
+    res.cookie("authentication-token", token);
 
     return res.status(200).json({ user, token });
 
@@ -69,8 +73,9 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/* LOGIN */
-
+// ==============================
+/* ========== LOGIN ========== */
+// ==============================
 router.post("/login", async (req, res) => {
   const { password, name, email } = req.body;
   try {
@@ -98,18 +103,22 @@ router.post("/login", async (req, res) => {
         created_at
       }
 
-      const token = jwt.sign(userData, process.env.JWT_SECRET,
-        {
-          jwtid: uuid(),
-          algorithm: "HS256",
-          keyid: uuid(),
-          expiresIn: "15m",
-          noTimestamp: false,
-        });
+      const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, { algorithm: 'HS256', keyid: '1', noTimestamp: false, 
+      expiresIn: '2m', notBefore: '2s' })
+      
+      let token2;
+      const token = tokenGenerator.sign(userData);  
+      
+      setTimeout(function () {
+        token2 = tokenGenerator.refresh(userData);
+        console.log("OLD", jwt.decode(token, { complete: true }));
+        console.log("NEW", jwt.decode(token2, { complete: true }));
+      }, 3000)
   
-      req.session.cookie.token = token;
+      res.cookie("authentication-token", token);
+  
+      return res.status(200).json({ userData, token });
 
-      return res.status(200).json({userData, token});
     } else {
       return res.status(403).json({ message: "Invalid login credentials" });
     }
