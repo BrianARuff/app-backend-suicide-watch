@@ -78,7 +78,7 @@ router.post("/register", async (req, res) => {
       console.log("NEW", jwt.decode(token2, { complete: true }));
     }, 3000)
 
-    res.cookie("authentication-token", token);
+    // res.cookie("authentication-token", token);
 
     return res.status(200).json({ user, token });
 
@@ -144,7 +144,7 @@ router.post("/login", async (req, res) => {
         console.log("NEW", jwt.decode(token2, { complete: true }));
       }, 3000)
 
-      res.cookie("authentication-token", token);
+      // res.cookie("authentication-token", token);
 
       return res.status(200).json({ userData, token });
 
