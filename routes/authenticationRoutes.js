@@ -59,7 +59,6 @@ router.post("/register", async (req, res) => {
       date_of_birth,
       role,
       description,
-      image,
       friends
     }
 
@@ -125,7 +124,6 @@ router.post("/login", async (req, res) => {
         date_of_birth,
         role,
         description,
-        image,
         friends,
         created_at
       }
