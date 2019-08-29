@@ -4,9 +4,9 @@ require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const cors = require("cors");
 const session = require("express-session");
 const uuid = require("uuid/v4");
+const bodyParser = require('body-parser');
 
 // route middleware
 const userRoutes = require("../routes/userRoutes");
@@ -28,6 +28,8 @@ const sessionConfiguration = {
 }
 
 module.exports = server => {
+  server.use(bodyParser.json({limit: '50mb'}));
+  server.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
   server.use(helmet());
   process.env.NODE_ENV === "development" ? server.use(morgan("dev")) : null;
   server.use(express.json());
