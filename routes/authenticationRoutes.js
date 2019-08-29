@@ -12,6 +12,9 @@ const TokenGenerator = require("../JWT/token-generator");
 // ==============================
 router.post("/register", async (req, res) => {
 
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
   const date = new Date();
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
@@ -89,6 +92,10 @@ router.post("/register", async (req, res) => {
 /* ========== LOGIN ========== */
 // ==============================
 router.post("/login", async (req, res) => {
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  
   const { password, name, email } = req.body;
   try {
     const user = await database.query("SELECT * FROM users WHERE users.name = $1 OR users.email = $1", [
