@@ -6,6 +6,7 @@ const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const TokenGenerator = require("../JWT/token-generator");
+const uuid = require("uuid/v4");
 
 //==============================
 /*==========REGISTER==========*/
@@ -65,7 +66,7 @@ router.post("/register", async (req, res) => {
     Object.freeze(user); // protect user object...
 
     const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
-      algorithm: 'HS256', keyid: '1', noTimestamp: false,
+      algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
       expiresIn: '2m', notBefore: '2s'
     })
 
@@ -131,7 +132,7 @@ router.post("/login", async (req, res) => {
       Object.freeze(userData); // protect userData...
 
       const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
-        algorithm: 'HS256', keyid: '1', noTimestamp: false,
+        algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
         expiresIn: '2m', notBefore: '2s'
       })
 
