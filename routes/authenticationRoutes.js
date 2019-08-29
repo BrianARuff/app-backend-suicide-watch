@@ -20,6 +20,8 @@ router.post("/register", async (req, res) => {
 
   let { password } = req.body;
 
+  // TODO send proper message when name/email is already in use than what we have now...
+
   // Extra protection from adding Admin Users
   if (role === "admin") {
     if (req.header("admin-secret") !== process.env.ADMIN_SECRET) {
@@ -47,7 +49,6 @@ router.post("/register", async (req, res) => {
       image,
       JSON.stringify(friends)
     ]);
-
 
     const user = {
       name,
@@ -97,7 +98,7 @@ router.post("/login", async (req, res) => {
     Object.freeze(user.rows[0]); // protect user object...
 
     if (!user.rows[0]) {
-      return res.status(403).json({message: "Invalid login credentials."});
+      return res.status(403).json({ message: "Invalid login credentials." });
     }
 
     const isValidPassword = await bcryptjs.compareSync(password, user.rows[0].password);

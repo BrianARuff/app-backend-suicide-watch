@@ -31,7 +31,6 @@ module.exports = server => {
   server.use(helmet());
   process.env.NODE_ENV === "development" ? server.use(morgan("dev")) : null;
   server.use(express.json());
-  server.use(cors());
   server.use(session(sessionConfiguration));
   server.use("/users", userRoutes);
   server.use("/auth", authenticationRoutes);
