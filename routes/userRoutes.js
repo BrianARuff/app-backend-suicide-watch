@@ -47,7 +47,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // GET USER by NAME
-router.get("/name/:name", async (req, res) => {
+router.get("/byname/:name", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   const { name } = req.params;
@@ -55,14 +55,14 @@ router.get("/name/:name", async (req, res) => {
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
   try {
-    const user = await database.query("SELECT * from USERS WHERE USERS.name = $1 ORDER", [name]);
+    const user = await database.query("SELECT * from USERS WHERE name = $1", [name]);
     if (!user.rows[0] || !user) {
       return res.status(404).json({ statusCode: res.statusCode, message: errors.clientSideError404, date: loggableDate, time: loggableTime });
     } else {
       return res.status(200).json(user.rows[0]);
     }
   } catch (error) {
-    return res.status(500).json({ error: formatPGErrors(error.stack), message: errors.serverSideErrorMessage500, date: loggableDate, time: loggableTime });
+    return res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });
   }
 });
 
