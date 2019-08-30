@@ -87,7 +87,7 @@ router.post("/register", async (req, res) => {
 
     // res.cookie("authentication-token", token);
 
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ user, token, image });
 
   } catch (error) {
     return res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });
@@ -153,7 +153,7 @@ router.post("/login", async (req, res) => {
 
       // res.cookie("authentication-token", token);
 
-      return res.status(200).json({ userData, token });
+      return res.status(200).json({ userData, token, image });
 
     } else {
       return res.status(403).json({ message: "Invalid login credentials" });
