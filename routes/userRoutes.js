@@ -8,6 +8,8 @@ const pg = require("pg");
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   const date = new Date();
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
@@ -26,6 +28,8 @@ router.get("/", async (req, res) => {
 
 // GET USER by ID
 router.get("/:id", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   const { id } = req.params;
   const date = new Date();
   const loggableDate = date.toLocaleDateString();
@@ -43,7 +47,9 @@ router.get("/:id", async (req, res) => {
 });
 
 // GET USER by NAME
-router.get("/name/:name", protectMemberScope, async (req, res) => {
+router.get("/name/:name", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   const { name } = req.params;
   const date = new Date();
   const loggableDate = date.toLocaleDateString();
@@ -61,6 +67,10 @@ router.get("/name/:name", protectMemberScope, async (req, res) => {
 });
 
 router.delete("/name/:name", protectAdminScope, async (req, res) => {
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
   const { name } = req.params;
 
   // save user before deleting it for more precise API response messages.
@@ -91,6 +101,8 @@ router.delete("/name/:name", protectAdminScope, async (req, res) => {
 });
 
 router.patch("/name/:name", protectAdminScope, async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   const { name } = req.params;
   const { email, password, date_of_birth, description, image, friends, role } = req.body;
 
@@ -119,6 +131,8 @@ router.patch("/name/:name", protectAdminScope, async (req, res) => {
 });
 
 router.get("/startsWith/:char", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   const { char } = req.params;
   try {
     const users = await database.query("SELECT * FROM users WHERE LOWER(name) LIKE LOWER($1) ORDER BY users.id ASC;", [
