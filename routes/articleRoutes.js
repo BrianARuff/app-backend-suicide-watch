@@ -3,12 +3,11 @@ const database = require("../db/pgConfig");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
 const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
-const headers = require("../Utils/accessControlAllowHeaders");
 
 
 
 router.get("/", async (req, res) => {
-  
+
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
