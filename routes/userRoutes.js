@@ -4,7 +4,6 @@ const errors = require("../ErrorMessages/errorIndex");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
 const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
-const pg = require("pg");
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {

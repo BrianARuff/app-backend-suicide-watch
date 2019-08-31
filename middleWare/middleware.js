@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 const userRoutes = require("../routes/userRoutes");
 const authenticationRoutes = require("../routes/authenticationRoutes");
 const thanosRoute = require("../routes/thanos-x2-Route");
+const articleRoutes = require("../routes/articleRoutes.js");
 
 const sessionConfiguration = {
   secret: process.env.JWT_SECRET,
@@ -35,6 +36,7 @@ module.exports = server => {
   server.use(session(sessionConfiguration));
   server.use("/users", userRoutes);
   server.use("/auth", authenticationRoutes);
+  server.use("/articles", articleRoutes);
   server.use("/thanos", thanosRoute);
   process.env.NODE_ENV === "development" ? server.use(morgan("dev")) : null;
 }
