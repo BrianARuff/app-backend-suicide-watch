@@ -8,8 +8,8 @@ const headers = require("../Utils/accessControlAllowHeaders");
 
 
 router.get("/", async (req, res) => {
-  headers[0]; // Access-Control-Allow-Origin", "*"
-  headers[1]; // Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept
+  headers().h1; // Access-Control-Allow-Origin", "*"
+  headers().h2; // Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept
   try {
     const articles = await database.query("SELECT * FROM ARTICLES");
     if (!articles.rows.length < 1) {
