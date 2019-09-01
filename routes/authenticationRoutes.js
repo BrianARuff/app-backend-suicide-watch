@@ -109,43 +109,16 @@ router.post("/login", async (req, res) => {
 
     const isValidPassword = await bcryptjs.compareSync(password, user.rows[0].password);
 
-    console.log(isValidPassword)
-
-
     if ((user.rows[0].name === name || user.rows[0].email === email) && isValidPassword) {
-
-
-      const userData = {
-        id:            user.rows[0].id,
-        name:          user.rows[0].name, 
-        email:         user.rows[0].email, 
-        date_of_birth: user.rows[0].date_of_birth,
-        description:   user.rows[0].description, 
-        role:          user.rows[0].role,
-        image:         user.rows[0].image,
-        created_at:    user.rows[0].created_at, 
-        updated_at:    user.rows[0].updated_at
-      }
-
-      Object.freeze(userData); // protect userData...
 
       const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
         algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
         expiresIn: '2m', notBefore: '2s'
-      })
+      });
 
-      let token2;
-      const token = tokenGenerator.sign(userData);
+      const token = tokenGenerator.sign(user.rows[0]);
 
-      setTimeout(function () {
-        token2 = tokenGenerator.refresh(userData);
-        console.log("OLD", jwt.decode(token, { complete: true }));
-        console.log("NEW", jwt.decode(token2, { complete: true }));
-      }, 3000)
-
-      // res.cookie("authentication-token", token);
-
-      return res.status(200).json({ userData, token, image });
+      return res.status(200).json({ userData: user.rows[0], token });
 
     } else {
       return res.status(403).json({ message: "Invalid login credentials" });
