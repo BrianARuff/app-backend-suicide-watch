@@ -143,4 +143,27 @@ router.get("/startsWith/:char", async (req, res) => {
   }
 });
 
+router.get("/articles/:id", async (req, res) => {
+  
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  const { id } = req.params;
+  
+  try {
+    const articles = await database.query("SELECT articles.id, title, text, author, likes, dislikes, read_time, articles.created_at, articles.updated_at, user_id, email, date_of_birth, image, role FROM articles INNER JOIN users on articles.user_id = users.id WHERE user_id = $1", [
+      id
+    ]);
+
+    if (!articles.rows[0] || articles.rows[0].length < 1) {
+      return res.status(204).json({ articles });
+    } else {
+      return res.status(200).json({ articles: articles.rows });
+    }
+
+  } catch (error) {
+    return res.status(500).json({ error: formatPGErrors(error), message: "Failed to retreive articles." });
+  }
+});
+
 module.exports = router;
