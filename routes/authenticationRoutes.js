@@ -115,17 +115,16 @@ router.post("/login", async (req, res) => {
     if ((user.rows[0].name === name || user.rows[0].email === email) && isValidPassword) {
 
 
-      const { name, email, date_of_birth, role, description, image, friends, created_at
-      } = user.rows[0];
-
       const userData = {
-        name,
-        email,
-        date_of_birth,
-        role,
-        description,
-        friends,
-        created_at
+        id:            user.rows[0].id,
+        name:          user.rows[0].name, 
+        email:         user.rows[0].email, 
+        date_of_birth: user.rows[0].date_of_birth,
+        description:   user.rows[0].description, 
+        role:          user.rows[0].role,
+        image:         user.rows[0].image,
+        created_at:    user.rows[0].created_at, 
+        updated_at:    user.rows[0].updated_at
       }
 
       Object.freeze(userData); // protect userData...
