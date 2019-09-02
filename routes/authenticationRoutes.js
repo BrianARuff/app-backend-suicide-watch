@@ -101,7 +101,7 @@ router.post("/login", async (req, res) => {
       name || email
     ]);
 
-    Object.freeze(user.rows[0]); // protect user object...
+    delete user.rows[0].image;
 
     if (!user.rows[0]) {
       return res.status(403).json({ message: "Invalid login credentials." });
