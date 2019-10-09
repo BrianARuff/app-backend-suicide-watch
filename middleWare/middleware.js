@@ -29,8 +29,8 @@ const sessionConfiguration = {
 }
 
 module.exports = server => {
-  server.use(bodyParser.json({limit: '2mb'}));
-  server.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
+  server.use(bodyParser.json({limit: '10mb'}));
+  server.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
   server.use(helmet());
   server.use(express.json());
   server.use(session(sessionConfiguration));
