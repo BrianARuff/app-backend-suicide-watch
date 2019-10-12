@@ -9,6 +9,7 @@ router.get("/article/:id", async (req, res) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+
   const { id } = req.params;
   try {
     const comments = await database.query(
@@ -38,6 +39,7 @@ router.post("/", async (req, res) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+
   const { author, text, author_id, article_id } = req.body;
 
   try {
@@ -71,6 +73,7 @@ router.get("/all", async (req, res) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+
   const comments = await database.query("select * from comments");
   if (!comments) {
     res
