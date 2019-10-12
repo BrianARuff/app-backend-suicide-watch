@@ -113,6 +113,11 @@ const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
 
   // Update likes
   router.patch("/:id/like", headersMW, async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
     const { id } = req.params;
     try {
       await database.query(

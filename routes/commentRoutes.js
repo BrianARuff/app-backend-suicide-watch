@@ -66,6 +66,11 @@ router.post("/", async (req, res) => {
 
 // all comments in existance
 router.get("/all", headersMW, async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   const comments = await database.query("select * from comments");
   if (!comments) {
     res
