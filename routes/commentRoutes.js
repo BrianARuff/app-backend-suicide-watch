@@ -1,10 +1,14 @@
 const router = require("express").Router();
 const database = require("../db/pgConfig");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
-const headersMW = require("../middleWare/headersMW.js");
 
 // GET comments for an article by article ID
-router.get("/article/:id", headersMW, async (req, res) => {
+router.get("/article/:id", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   const { id } = req.params;
   try {
     const comments = await database.query(
@@ -28,7 +32,12 @@ router.get("/article/:id", headersMW, async (req, res) => {
 });
 
 // POST a new comment using author, text, author_id, and article_id
-router.post("/", headersMW, async (req, res) => {
+router.post("/", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   const { author, text, author_id, article_id } = req.body;
 
   try {

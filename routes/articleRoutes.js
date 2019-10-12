@@ -4,22 +4,13 @@ const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
 const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
 
-function headersMW(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-}
-
 (() => {
-  router.get("/", headersMW, async (req, res) => {
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header(
-    //   "Access-Control-Allow-Headers",
-    //   "Origin, X-Requested-With, Content-Type, Accept"
-    // );
+  router.get("/", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
 
     try {
       const articles = await database.query(
@@ -37,11 +28,11 @@ function headersMW(req, res, next) {
 
   // GET user by ID
   router.get("/:id", headersMW, async (req, res) => {
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header(
-    //   "Access-Control-Allow-Headers",
-    //   "Origin, X-Requested-With, Content-Type, Accept"
-    // );
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
 
     const { id } = req.params;
 
@@ -62,11 +53,11 @@ function headersMW(req, res, next) {
   });
 
   router.post("/", headersMW, async (req, res) => {
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header(
-    //   "Access-Control-Allow-Headers",
-    //   "Origin, X-Requested-With, Content-Type, Accept"
-    // );
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
 
     const {
       title,
@@ -142,7 +133,12 @@ function headersMW(req, res, next) {
   });
 
   // Update dislikes
-  router.patch("/:id/dislike", headersMW, async (req, res) => {
+  router.patch("/:id/dislike", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
     const { id } = req.params;
     try {
       await database.query(
@@ -163,7 +159,12 @@ function headersMW(req, res, next) {
   });
 
   // Update your own post content
-  router.patch("/:id/edit", headersMW, async (req, res) => {
+  router.patch("/:id/edit", async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
     const { text, title } = req.body;
     const { id } = req.params;
 
