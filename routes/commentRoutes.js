@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
 });
 
 // all comments in existance
-router.get("/all", headersMW, async (req, res) => {
+router.get("/all", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
