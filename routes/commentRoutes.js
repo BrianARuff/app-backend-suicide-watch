@@ -42,6 +42,9 @@ router.post("/", async (req, res) => {
 
   const { author, text, author_id, article_id } = req.body;
 
+  // testing purposes... can remove if post comment is working
+  console.log(JSON.stringify({ author, text, author_id, article_id }, null, 4));
+
   try {
     const comment = await database.query(
       "INSERT INTO comments (author, text, author_id, article_id) VALUES ($1, $2, $3, $4);",

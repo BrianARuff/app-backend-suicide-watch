@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const session = require("express-session");
 const uuid = require("uuid/v4");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 // route middleware
 const userRoutes = require("../routes/userRoutes");
@@ -30,6 +31,7 @@ const sessionConfiguration = {
 };
 
 module.exports = server => {
+  server.use(cors());
   server.use(bodyParser.json({ limit: "10mb" }));
   server.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
   server.use(helmet());
