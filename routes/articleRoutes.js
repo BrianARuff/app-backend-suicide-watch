@@ -12,9 +12,12 @@ const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
       "Origin, X-Requested-With, Content-Type, Accept"
     );
 
+    const { limit = "20", offset = "0" } = req.query;
+
     try {
       const articles = await database.query(
-        "SELECT * FROM ARTICLES ORDER BY id DESC"
+        "SELECT * FROM ARTICLES ORDER BY id DESC limit $1 offset $2",
+        [limit, offset]
       );
       if (!articles.rows[0] || !articles.rows[0].length < 1) {
         return res.status(403).json({ message: "No Articles Found" });
