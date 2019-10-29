@@ -3,7 +3,7 @@ const database = require("../db/pgConfig");
 const errors = require("../ErrorMessages/errorIndex");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
-// const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
+const bcrypt = require("bcryptjs");
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {
@@ -251,6 +251,53 @@ router.get("/articles/:id", async (req, res) => {
       error: formatPGErrors(error),
       message: "Failed to retreive articles."
     });
+  }
+});
+
+// Update User Password
+router.patch("/update_account", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  const { oldPassword, oldPasswordVerify, newPassword, id } = req.body;
+  try {
+    const user = await database.query(
+      "SELECT * from USERS WHERE USERS.id = $1",
+      [id]
+    );
+    if (!user) {
+      return res.status(403).json({ message: "No user found." });
+    } else {
+      const oldPSW = await bcryptjs.compareSync(
+        oldPassword,
+        user.rows[0].password
+      );
+      if (oldPSW && oldPassword === oldPasswordVerify) {
+        const salt = await bcrypt.genSalt(12);
+        const hash = await bcrypt.hash(newPassword, salt);
+        const paswordUpdated = await database.query(
+          "UPDATE USERS SET password = $1 WHERE users.id = $2;",
+          [hash, id]
+        );
+        if (!paswordUpdated.rowCount) {
+          return res
+            .status(403)
+            .json({ message: "Sorry, password failed to update" });
+        } else {
+          const updatedUser = await database.query(
+            "select * from users where id = $1",
+            [id]
+          );
+          return res.status(200).json({ user: updatedUser.rows });
+        }
+      } else {
+        res.status(403).json({ message: "Invalid Password" });
+      }
+    }
+  } catch (error) {
+    return res.status(500).json(formatPGErrors(error));
   }
 });
 
