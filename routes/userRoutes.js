@@ -270,10 +270,16 @@ router.patch("/update_account", async (req, res) => {
     if (!user) {
       return res.status(403).json({ message: "No user found." });
     } else {
-      const oldPSW = await bcryptjs.compareSync(
+      const oldPSW = await bcrypt.compareSync(
         oldPassword,
         user.rows[0].password
       );
+      if (oldPassword !== oldPasswordVerify) {
+        return res.status(403).json({
+          message:
+            "Passwords do not match. Plese ensure that you have typed both passwords in correctly."
+        });
+      }
       if (oldPSW && oldPassword === oldPasswordVerify) {
         const salt = await bcrypt.genSalt(12);
         const hash = await bcrypt.hash(newPassword, salt);
@@ -293,7 +299,12 @@ router.patch("/update_account", async (req, res) => {
           return res.status(200).json({ user: updatedUser.rows });
         }
       } else {
-        res.status(403).json({ message: "Invalid Password" });
+        res
+          .status(403)
+          .json({
+            message:
+              "Invalid input. Make sure that you are putting in your latest password to update the content."
+          });
       }
     }
   } catch (error) {
