@@ -11,6 +11,32 @@
  
 ---
 
+### **Fix Proposals**
+
+```
+If user likes a post
+	- add user to post liked
+If user dislikes a post
+	- add user to post disliked
+If user id is in liked and is true
+	- refuse to like again
+If user id is in liked but is false
+	- allow up vote
+
+Table Articles
+	- id
+	- title
+	- text
+	- JSON of user ids for likes (I.E {324: true, 311: true}
+	- likes
+	- dislikes
+
+
+Needed Updates
+1. Update schema for Articles to include JSON entries for likes and dislikes
+2. Update API for when user clicks like or dislike the backend checks the db for the validation needed for liking/disliking a comment.
+```
+
 ##### **HERE IS A PIECE OF BAD ASCII ART FOR NO PARTICULAR REASON**
 ```
 <-------------------->
