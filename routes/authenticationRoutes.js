@@ -7,6 +7,8 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const TokenGenerator = require("../JWT/token-generator");
 const uuid = require("uuid/v4");
+const cors = require("cors");
+router.use(cors());
 
 //==============================
 /*==========REGISTER==========*/

@@ -3,6 +3,8 @@ const database = require("../db/pgConfig");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
 const protectMemberScope = require("../middleWare/protectRoutesMemberScope");
+const cors = require("cors");
+router.use(cors());
 
 (() => {
   router.get("/", async (req, res) => {

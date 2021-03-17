@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const formatPGErrors = require("../ErrorMessages/formatPGErrors.js");
 const database = require("../db/pgConfig");
+const cors = require("cors");
+router.use(cors());
 
 router.post("/", async (req, res) => {
   try {

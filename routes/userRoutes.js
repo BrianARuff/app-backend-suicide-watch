@@ -5,6 +5,8 @@ const errors = require("../ErrorMessages/errorIndex");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
 const protectAdminScope = require("../middleWare/protectRoutesAdminScope");
 const bcrypt = require("bcryptjs");
+const cors = require("cors");
+router.use(cors());
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {

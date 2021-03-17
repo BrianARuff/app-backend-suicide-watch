@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const database = require("../db/pgConfig");
 const formatPGErrors = require("../ErrorMessages/formatPGErrors");
-
+const cors = require("cors");
+router.use(cors());
 // GET comments for an article by article ID
 router.get("/article/:id", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
