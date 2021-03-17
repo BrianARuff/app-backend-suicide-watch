@@ -41,8 +41,7 @@ router.post("/register", async (req, res) => {
 
   if (password) {
     const salt = await bcryptjs.genSalt(12);
-    const hash = await bcryptjs.hash(password, salt);
-    password = hash;
+    password = await bcryptjs.hash(password, salt);
   } else {
     console.error(new Error("Invalid password Error @ path:/auth/register"))
     return res.status(403).json({ message: "Invalid Password. Please try again." });
