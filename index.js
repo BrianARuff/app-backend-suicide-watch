@@ -18,7 +18,7 @@ server.get("/", (req, res) => {
   res.send("<h1>It works</h1>");
 });
 
-server.listen(process.env.PORT || 3000, "localhost",() => {
+server.listen(process.env.PORT, () => {
   const consoleMessage = `Server running on port ${process.env.PORT || 3000}`;
   process.stdout.write("---" + consoleMessage + "---\n");
 });
