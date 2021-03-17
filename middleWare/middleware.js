@@ -36,7 +36,7 @@ module.exports = server => {
   server.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
   server.use(helmet());
   server.use(express.json());
-  server.use(session(sessionConfiguration));
+  // server.use(session(sessionConfiguration));
   server.use("/users", userRoutes);
   server.use("/auth", authenticationRoutes);
   server.use("/articles", articleRoutes);

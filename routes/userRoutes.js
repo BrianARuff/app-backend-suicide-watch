@@ -1,3 +1,4 @@
+require("dotenv");
 const router = require("express").Router();
 const database = require("../db/pgConfig");
 const errors = require("../ErrorMessages/errorIndex");
