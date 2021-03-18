@@ -82,9 +82,11 @@ router.post("/register", async (req, res) => {
     });
     const  token = tokenGenerator.sign(process.env.JWT_SECRET, user);
 
+    console.log(user, token, image);
+
     // const token = tokenGenerator.sign(user);
 
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ user, token, image });
 
   } catch (error) {
     return res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });
