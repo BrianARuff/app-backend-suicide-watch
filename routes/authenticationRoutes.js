@@ -62,19 +62,20 @@ router.post("/register", async (req, res) => {
             image,
             JSON.stringify(friends)
         ]);
+        let user;
+        database.query("SELECT * FROM users WHERE users.name = $1", [name]).then(table => {
+            user = {
+                id: table.rows[0].id,
+                name: table.rows[0].name,
+                email: table.rows[0].email,
+                date_of_birth: table.rows[0].date_of_birth,
+                description: table.rows[0].description,
+                role: table.rows[0].role,
+                created_at: table.rows[0].created_at,
+                updated_at: table.rows[0].updated_at
+            }
+        })
 
-        const userRawData = await  database.query("SELECT * FROM users WHERE users.name = $1", [name]);
-        console.log('raw data', userRawData);
-        const user = {
-            id: userRawData.rows[0].id,
-            name: userRawData.rows[0].name,
-            email: userRawData.rows[0].email,
-            date_of_birth: userRawData.rows[0].date_of_birth,
-            description: userRawData.rows[0].description,
-            role: userRawData.rows[0].role,
-            created_at: userRawData.rows[0].created_at,
-            updated_at: userRawData.rows[0].updated_at
-        }
 
         const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
             algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
