@@ -60,7 +60,7 @@ router.post("/register", async (req, res) => {
             role,
             description,
             image,
-            JSON.stringify(friends)
+            JSON.stringify({})
         ]);
 
         const userRawData = database.query("SELECT * FROM users WHERE users.name = $1", [name]);
