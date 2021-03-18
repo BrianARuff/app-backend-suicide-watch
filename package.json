@@ -40,13 +40,6 @@
     "pg": "^7.12.1",
     "uuid": "^3.3.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
-  }
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
   }
 }
