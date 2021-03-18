@@ -60,15 +60,11 @@ router.post("/register", async (req, res) => {
             role,
             description,
             image,
-            JSON.stringify(friends) || JSON.stringify({})
-        ]).then(table => {
-            console.log(table.rows);
-            return res.status(200).json(table);
-        })
-            .catch(err => res.status(500).json(err));
+            JSON.stringify(friends)
+        ]);
 
         const userRawData = database.query("SELECT * FROM users WHERE users.name = $1", [name]);
-
+        console.log('raw data', userRawData);
         const user = {
             id: userRawData.rows[0].id,
             name: userRawData.rows[0].name,
@@ -84,11 +80,7 @@ router.post("/register", async (req, res) => {
             algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
             expiresIn: '2m', notBefore: '2s'
         });
-        const token = tokenGenerator.sign(process.env.JWT_SECRET, user);
-
-        console.log(user, token, image);
-
-        // const token = tokenGenerator.sign(user);
+        const token = tokenGenerator.sign(user);
 
         return res.status(200).json({user, token, image});
 
