@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
     console.log("psw after hash", password);
 
     try {
-        database.query("INSERT into users ( name, password, email, date_of_birth, role, description, image, friends ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )", [
+        const usersInsert = await database.query("INSERT into users ( name, password, email, date_of_birth, role, description, image, friends ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *", [
             name,
             password,
             email,
@@ -60,8 +60,12 @@ router.post("/register", async (req, res) => {
             role,
             description,
             image,
-            JSON.stringify({})
-        ]);
+            "{}"
+        ]).then(t => {
+            console.log(t);
+        })
+
+        usersInsert();
 
         const userRawData = database.query("SELECT * FROM users WHERE users.name = $1", [name]);
         console.log(userRawData);
