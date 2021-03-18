@@ -14,7 +14,6 @@ router.use(cors());
 /*==========REGISTER==========*/
 // ==============================
 router.post("/register", async (req, res) => {
-    let user;
 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -51,6 +50,7 @@ router.post("/register", async (req, res) => {
     }
 
     console.log("psw after hash", password);
+
     try {
         database.query("INSERT into users ( name, password, email, date_of_birth, role, description, image, friends ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )", [
             name,
@@ -63,26 +63,24 @@ router.post("/register", async (req, res) => {
             JSON.stringify(friends)
         ]);
 
-        database.query("SELECT * FROM users WHERE users.name = $1", [name]).then(table => {
-            console.log(table);
-            user = {
-                id: table.rows[0].id,
-                name: table.rows[0].name,
-                email: table.rows[0].email,
-                date_of_birth: table.rows[0].date_of_birth,
-                description: table.rows[0].description,
-                role: table.rows[0].role,
-                created_at: table.rows[0].created_at,
-                updated_at: table.rows[0].updated_at
-            }
-        })
+        const userRawData = database.query("SELECT * FROM users WHERE users.name = $1", [name]);
+        console.log(userRawData);
+        const user = {
+            id: userRawData.rows[0].id,
+            name: userRawData.rows[0].name,
+            email: userRawData.rows[0].email,
+            date_of_birth: userRawData.rows[0].date_of_birth,
+            description: userRawData.rows[0].description,
+            role: userRawData.rows[0].role,
+            created_at: userRawData.rows[0].created_at,
+            updated_at: userRawData.rows[0].updated_at
+        }
 
-        console.log(user);
         const tokenGenerator = new TokenGenerator(process.env.JWT_SECRET, process.env.JWT_PUBLIC, {
             algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
             expiresIn: '2m', notBefore: '2s'
         });
-        const token = tokenGenerator.sign(process.env(JWT_SECRET, user));
+        const token = tokenGenerator.sign(user);
 
         return res.status(200).json({user, token, image});
 
