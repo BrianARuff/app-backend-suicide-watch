@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
     console.log("psw after hash", password);
 
     try {
-        database.query("INSERT into users ( name, password, email, date_of_birth, role, description, image, friends ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 ) RETURNING *", [
+        await  database.query("INSERT into users ( name, password, email, date_of_birth, role, description, image, friends ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )", [
             name,
             password,
             email,
@@ -60,13 +60,11 @@ router.post("/register", async (req, res) => {
             role,
             description,
             image,
-            "{}"
-        ]).then(t => {
-            console.log(t);
-        }).catch(err => console.log('err', err));
+            JSON.stringify(friends) || JSON.stringify({})
+        ]);
 
-        const userRawData = database.query("SELECT * FROM users WHERE users.name = $1", [name]);
-        console.log(userRawData);
+        const userRawData =  await  database.query("SELECT * FROM users WHERE users.name = $1", [name]);
+
         const user = {
             id: userRawData.rows[0].id,
             name: userRawData.rows[0].name,
@@ -82,6 +80,9 @@ router.post("/register", async (req, res) => {
             algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
             expiresIn: '2m', notBefore: '2s'
         });
+
+        console.log(user, token, image);
+
         const token = tokenGenerator.sign(user);
 
         return res.status(200).json({user, token, image});
