@@ -10,7 +10,6 @@ router.use(cors());
 
 // GET ALL USERS LIST
 router.get("/", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
   const date = new Date();
   const loggableDate = date.toLocaleDateString();
   const loggableTime = date.toLocaleTimeString();
