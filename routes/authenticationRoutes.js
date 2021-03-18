@@ -63,7 +63,7 @@ router.post("/register", async (req, res) => {
             JSON.stringify(friends)
         ]);
 
-        const userRawData = database.query("SELECT * FROM users WHERE users.name = $1", [name]);
+        const userRawData = await  database.query("SELECT * FROM users WHERE users.name = $1", [name]);
         console.log('raw data', userRawData);
         const user = {
             id: userRawData.rows[0].id,
