@@ -22,6 +22,8 @@ router.get("/", async (req, res) => {
     const { rows: users } = await database.query(
       "SELECT * from USERS ORDER BY users.created_at DESC"
     );
+    console.log(users);
+    res.status(200).json({ users });
     if (users.length < 1 || !users) {
       errors.clientSideError404;
       return res.status(404).json({ users: [] });
