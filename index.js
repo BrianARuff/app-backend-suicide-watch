@@ -19,6 +19,6 @@ server.get("/", (req, res) => {
 });
 
 server.listen(process.env.PORT, () => {
-  const consoleMessage = `Server running on port ${process.env.PORT || 3000}`;
+  const consoleMessage = `Server running on port ${process.env.PORT}`;
   process.stdout.write("---" + consoleMessage + "---\n");
 });
