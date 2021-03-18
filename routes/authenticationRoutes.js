@@ -40,7 +40,7 @@ router.post("/register", async (req, res) => {
       return res.status(403).json({ message: "Invalid credientials to create admin accounts" })
     }
   }
-
+  console.log("psw before hash", password);
   if (password) {
     const salt = await bcryptjs.genSalt(12);
     password = await bcryptjs.hash(password, salt);
@@ -48,6 +48,8 @@ router.post("/register", async (req, res) => {
     console.error(new Error("Invalid password Error @ path:/auth/register"))
     return res.status(403).json({ message: "Invalid Password. Please try again." });
   }
+
+  console.log("psw after hash", password);
 
   try {
     await database.query("INSERT into USERS ( name, password, email, date_of_birth, role, description, image, friends ) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )", [
@@ -78,10 +80,11 @@ router.post("/register", async (req, res) => {
       algorithm: 'HS256', keyid: uuid(), noTimestamp: false,
       expiresIn: '2m', notBefore: '2s'
     });
+    const  token = tokenGenerator.sign(process.env.JWT_SECRET, user);
 
-    const token = tokenGenerator.sign(user);
+    // const token = tokenGenerator.sign(user);
 
-    return res.status(200).json({ user, token, image });
+    return res.status(200).json({ user, token });
 
   } catch (error) {
     return res.status(500).json({ error: formatPGErrors(error), date: loggableDate, time: loggableTime });

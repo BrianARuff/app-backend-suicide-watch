@@ -30,6 +30,8 @@ const sessionConfiguration = {
   saveUninitialized: true
 };
 
+
+
 module.exports = server => {
   server.use(cors());
   server.use(bodyParser.json({ limit: "10mb" }));
