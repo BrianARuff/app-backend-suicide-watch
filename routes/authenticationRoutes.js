@@ -64,6 +64,7 @@ router.post("/register", async (req, res) => {
         ]);
 
         database.query("SELECT * FROM users WHERE users.name = $1", [name]).then(table => {
+            console.log(table);
             user = {
                 id: table.rows[0].id,
                 name: table.rows[0].name,
